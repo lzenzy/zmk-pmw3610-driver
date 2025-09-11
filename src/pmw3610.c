@@ -657,6 +657,19 @@ static int pmw3610_report_data(const struct device *dev) {
         return err;
     }
 
+    // デバッグログ: バーストデータの全内容を出力
+    LOG_INF("Burst data: [0]=%02x [1]=%02x [2]=%02x [3]=%02x [4]=%02x [5]=%02x [6]=%02x", 
+            buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6]);
+
+    // Filter out abnormal motion data based on observation register value
+    // When observation > 0x3f (63), it indicates unreliable sensor data that can cause pointer jumps
+    // This fix is based on similar implementation in QMK's Keyball61 trackball support
+    uint8_t observation = buf[PMW3610_OBSERVATION_POS];
+    if (observation > 0x3f) {
+        LOG_DBG("Discarding motion data due to invalid observation: 0x%02x", observation);
+        return 0; // Skip processing abnormal data
+    }
+
     int16_t raw_x =
         TOINT16((buf[PMW3610_X_L_POS] + ((buf[PMW3610_XY_H_POS] & 0xF0) << 4)), 12) / dividor;
     int16_t raw_y =

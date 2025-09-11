@@ -89,6 +89,8 @@ extern "C" {
 #define PMW3610_X_L_POS 1
 #define PMW3610_Y_L_POS 2
 #define PMW3610_XY_H_POS 3
+/* PMW3610 observation register position in burst data - used to filter abnormal motion data */
+#define PMW3610_OBSERVATION_POS 4
 #define PMW3610_SHUTTER_H_POS 5
 #define PMW3610_SHUTTER_L_POS 6
 
