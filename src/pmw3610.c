@@ -853,6 +853,7 @@ static int pmw3610_init_irq(const struct device *dev) {
 }
 
 static int pmw3610_init(const struct device *dev) {
+    printk("\n\n*** PMW3610 INIT CALLED ***\n\n");
     LOG_INF("Start initializing...");
 
     struct pixart_data *data = dev->data;
@@ -955,3 +956,8 @@ DT_INST_FOREACH_CHILD(0, BALL_ACTIONS_INST)
                           CONFIG_SENSOR_INIT_PRIORITY, NULL);
 
 DT_INST_FOREACH_STATUS_OKAY(PMW3610_DEFINE)
+
+/* Build-time check: if no instances, this will print at boot */
+#if !DT_HAS_COMPAT_STATUS_OKAY(pixart_pmw3610)
+#warning "No pixart,pmw3610 nodes with status okay found in devicetree!"
+#endif
