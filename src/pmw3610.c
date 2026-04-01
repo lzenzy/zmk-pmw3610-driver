@@ -853,6 +853,9 @@ static int pmw3610_init_irq(const struct device *dev) {
 }
 
 static int pmw3610_init(const struct device *dev) {
+    /* Diagnostic: 5-second delay to confirm init is being called.
+       If boot takes ~8 seconds instead of ~3, this function IS running. */
+    k_busy_wait(5000000);
     printk("\n\n*** PMW3610 INIT CALLED ***\n\n");
     LOG_INF("Start initializing...");
 
